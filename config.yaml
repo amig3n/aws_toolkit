@@ -1,0 +1,59 @@
+output:
+  default:
+  - InstanceId
+  - PrivateIpAddress
+  - Status
+  - Tags.Name
+
+  rewrite_titles:
+    active: yes
+    titles:
+    - InstanceId: Instance ID
+    - PrivateIpAddress: Private IP
+    - Tags.Name: Name
+
+  modifiers:
+  - name: purpose
+    includeGroups:
+    - default
+    output:
+    - Tags.Purpose
+    modifier: p
+    helptext: "Display defaults + EC2 purpose tag"
+
+  - name: public_ip
+    includeGroups:
+    - default
+    - purpose
+    modifier: i
+    output:
+    - PublicIP
+    helptext: "Display defaults + EC2 purpose tag + public ip"
+
+  - name: private_ip_ssh
+    includeGroups: []
+    modifier: s
+    output:
+    - Tags.name
+    - PrivateIP
+    helptext: "Display private ip"
+
+# if given field should be colored, define given colors per value
+# colors should be defined as unix color escape sequences
+# e.g red is e[0;31m
+colors:
+  - field: Status
+    values:
+    - value: running
+      color: \033[92m
+    - value: stopped
+      color: \033[37m
+    - value: terminated
+      color: \033[31m
+    - value: pending
+      color: \033[33m
+    default_color: white
+
+  
+
+
